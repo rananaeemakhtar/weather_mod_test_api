@@ -24,13 +24,20 @@ router.get('/api/weather', weatherRequest, validate, async (req, res) => {
         try {
             // validate input
             // call weather api
-            console.log(`Fetching weather data for city: ${req.query.city}`);
+            // transform response
+
             const weatherResponse = await fetch(`${process.env.WEATHER_API_URL}?key=${process.env.WEATHER_API_KEY}&q=${req.query.city}`);
             const weatherData = await weatherResponse.json();
-
-            // console.log('Raw weather data:', weatherData);
-            // transform response
             const transformedData = transform(weatherData);
+
+            // if city is not found, WeatherAPI returns a 200 status with an error 
+            // object in the response, having all values null.
+            if(!transformedData.city) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'City not found'
+                });
+            }
 
             res.json({
                 success: true,
