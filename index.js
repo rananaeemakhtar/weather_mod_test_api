@@ -1,7 +1,7 @@
 const express = require('express');
 const { weatherRequest } = require('./src/validators/weather.validator');
 const validate = require('./src/middlewares/validator');
-const transform = require('./src/transformers/weatherResource');
+const { transform } = require('./src/transformers/weatherResource');
 require('dotenv').config();
 
 const app = express();
@@ -12,13 +12,15 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(router);
 
-router.post('/api/weather', weatherRequest, validate, async (req, res) => {
+router.get('/api/weather', weatherRequest, validate, async (req, res) => {
         try {
             // validate input
             // call weather api
-
-            const weatherResponse = await fetch(`${process.env.WEATHER_API_URL}?key=${process.env.WEATHER_API_KEY}&q=${req.body.city}`);
+            console.log(`Fetching weather data for city: ${req.query.city}`);
+            const weatherResponse = await fetch(`${process.env.WEATHER_API_URL}?key=${process.env.WEATHER_API_KEY}&q=${req.query.city}`);
             const weatherData = await weatherResponse.json();
+
+            console.log('Raw weather data:', weatherData);
             // transform response
             const transformedData = transform(weatherData);
 

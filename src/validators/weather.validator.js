@@ -1,7 +1,7 @@
-const { body } = require('express-validator');
+const { query } = require('express-validator');
 
 const weatherRequest = [
-    body('city')
+    query('city')
         .notEmpty()
         .withMessage('City is required')
         .isLength({ min: 2 })

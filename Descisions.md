@@ -1,4 +1,8 @@
+used weather api because it does not require lat, lng so we dont need extra geocoding request to fetch lat, lng
+
 cors and helmet not setup because of time limit
+
+dotenv used to save api key and url which will be not accessible by any application user
 
 used transformers for normalizing json response
 
